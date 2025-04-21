@@ -9,7 +9,7 @@ void insertSort(vector<int> &a, int l, int r){
     for(int i = l+1; i <= r; i++){
         int k = a[i];
         int j = i - 1;
-        while(j >= l && a[i] > k){
+        while(j >= l && a[j] > k){
             a[j+1] = a[j];
             --j;
         }
@@ -30,7 +30,7 @@ void merge(vector<int> &a, int l, int m, int r){
 
     int k = l, i = 0, j = 0;
     while(i < len1 && j < len2){
-        if(left[i] <= right[i]){
+        if(left[i] <= right[j]){
             a[k++] = left[i++];
         }
         else{
