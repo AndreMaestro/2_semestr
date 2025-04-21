@@ -18,7 +18,8 @@ void insertSort(vector<int> &a, int l, int r){
 }
 
 void merge(vector<int> &a, int l, int m, int r){
-    int len1 = m - l + 1, len2 = r - m;
+    int len1 = m - l + 1; 
+    int len2 = r - m;
     vector<int> left(len1);
     vector<int> right(len2);
     for(int i = 0; i < len1; i++){
