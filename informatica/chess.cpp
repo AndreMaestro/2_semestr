@@ -24,6 +24,21 @@ void push(queue *&h, queue *&t, pair<int, int> x){
     }
     else{
         t->next = r;
-        r = r;
+        t = r;
     }
+}
+
+pair<int, int> pop(queue*& h, queue *& t){
+    queue *r = h;
+    pair<int, int> i = h->inf;
+    h = h->next;
+    if (!h){
+        t = NULL;
+    }
+    delete r;
+    return i;
+}
+
+bool isValid(int x, int y, int N){
+    return (x >= 0 && x < N) && (y >= 0 && y < N);
 }
