@@ -42,3 +42,13 @@ pair<int, int> pop(queue*& h, queue *& t){
 bool isValid(int x, int y, int N){
     return (x >= 0 && x < N) && (y >= 0 && y < N);
 }
+
+struct node{
+    int x, y, dist;
+    pair<int, int> par;
+    node(int x, int y, int dist = 0, pair<int, int> p = {-1,-1}): x(x), y(y), dist(dist), par(p){}
+    bool operator <(const node &d){
+        return (x < d.x || (x == d.x && y < d.y));
+    }
+};
+
