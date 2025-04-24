@@ -101,3 +101,23 @@ void printWay(const vector<pair<int, int>> &way){
     }
     cout << endl;
 }
+
+int main(){
+    int N = 8;
+    string b, e;
+    cout << "Enter the starting position (For example, A2): "; cin >> b;
+    cout << "Enter the end position (For example, E6): "; cin >> e;
+
+    pair<int, int> begin = inputConvertator(b);
+    pair<int, int> end = inputConvertator(e);
+
+    vector<pair<int, int>> Way = ShortestPath(N, begin, end);
+    if (Way.empty()){
+        cout << "Check the entered positions" << endl;
+    }
+    else{
+        cout << "The shortest path: ";
+        printWay(Way);
+    }
+    return 0;
+}
