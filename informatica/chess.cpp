@@ -90,3 +90,14 @@ vector<pair<int, int>> ShortestPath(int N, pair<int, int> begin, pair<int, int> 
     reverse(Way.begin(), Way.end());
     return Way;
 }
+
+pair<int, int> inputConvertator(const string& s){
+    return {s[0] - 'A', s[1] - '1'};
+}
+
+void printWay(const vector<pair<int, int>> &way){
+    for(pair<int, int> p : way){
+        cout << char(p.first + 'A') << p.second + 1 << " "; 
+    }
+    cout << endl;
+}
