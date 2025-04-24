@@ -5,6 +5,7 @@
 #include <string>
 #include <set>
 #include <climits>
+#include <algorithm>
 using namespace std;
 
 int x_step[] = {-2, -2, 2, 2, 1, 1, -1, -1};
@@ -52,3 +53,40 @@ struct node{
     }
 };
 
+vector<pair<int, int>> ShortestPath(int N, pair<int, int> begin, pair<int, int> end){
+    set<pair<int, int>> visit;
+    queue *h = NULL, *t = NULL;
+    vector<pair<int, int>> parent(N*N, {-1,-1});
+    //начало обхода в ширину(BFS)
+    push(h, t, begin);
+    visit.insert(begin);
+
+    while(h){
+        pair<int, int> current = pop(h, t);
+        if(current == end) break;
+
+        int x = current.first;
+        int y = current.second;
+        for(int i = 0; i < 8; i++){
+            int x1 = x + x_step[i];
+            int y1 = y + y_step[i];
+            if(isValid(x1, y1, N) && visit.count({x1, y1}) == 0){
+                push(h, t, {x1, y1});
+                visit.insert({x1, y1});
+                parent[x1*N + y1] = current;
+            }
+        }
+    }
+
+    vector<pair<int, int>> Way;
+    pair<int, int> cur = end;
+    while(end != begin){
+        if(cur.first == -1 || parent[cur.first*N + cur.second] == make_pair(-1,-1)) return {};
+
+        Way.push_back(cur);
+        cur = parent[cur.first*N + cur.second];
+    }
+    Way.push_back(begin);
+    reverse(Way.begin(), Way.end());
+    return Way;
+}
