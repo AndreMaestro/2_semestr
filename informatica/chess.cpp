@@ -80,7 +80,7 @@ vector<pair<int, int>> ShortestPath(int N, pair<int, int> begin, pair<int, int> 
 
     vector<pair<int, int>> Way;
     pair<int, int> cur = end;
-    while(end != begin){
+    while(cur != begin){
         if(cur.first == -1 || parent[cur.first*N + cur.second] == make_pair(-1,-1)) return {};
 
         Way.push_back(cur);
