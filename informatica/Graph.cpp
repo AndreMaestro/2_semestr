@@ -2,6 +2,9 @@
 
 #include<iostream>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <limits>
 using namespace std;
 
 struct queue{
@@ -33,7 +36,33 @@ int Qpop (queue *&h, queue *&t){
     return i;
 }
 
+void BFS(const vector<vector<int>> &gr, int N, int x){
+    queue *h = NULL, *t = NULL;
+    vector<int> A(N, 0);
+    A[x] = 1;
+    Qpush(h, t, x);
+    /*cout << x << " ";*/
+    while(h){
+        int cur = Qpop(h, t);
+        cout << cur << " ";
 
+        for(int i = 0; i < gr[cur].size(); i++){
+            int y = gr[cur][i];
+            if(A[y] == 0){
+                A[y] = 1;
+                Qpush(h, t, y);
+            }
+        }
+    }
+
+    for(int i = 0; i < N; i++){
+        if (A[i] == 0){
+            BFS(gr, N, i);
+        }
+    }
+}
+
+/*-------------------------------------------------------------*/
 struct stack{
     int inf;
     stack *next;
@@ -54,6 +83,75 @@ int Spop(stack *&h){
     return x;
 }
 
-int main(){
+void DFS(const vector<vector<int>> &gr, int N, int x){
+    stack *h = NULL;
+    vector<int> A (N, 0);
+    A[x] = 1;
+    Spush(h, x);
+    cout << x << " ";
+    
+    while(h){
+        int cur = h->inf;
+        bool fl = false;
+        for(int i = 0; i < gr[cur].size(); i++){
+            int y = gr[cur][i];
+            if(A[y] == 0){
+                Spush(h, y);
+                A[y] = 1;
+                cout<< y << " ";
+                fl = true;
+                break;
+            }
+        }
 
+        if(!fl){
+            Spop(h);
+        }
+    }
+
+    for(int i = 0; i < N; i++){
+        if (A[i] == 0){
+            DFS(gr, N, i);
+        }
+    }
+}
+
+/*-------------------------------------------------------------*/
+
+vector<vector<int>> Graph(int N){
+    vector<vector<int>> gr(N);
+    cout << "Enter list of adjacencies(enter one line per vertex): " << endl;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // очистка буфера ввода
+
+    for(int i = 0; i < N; ++i){
+        cout << i << ": ";
+        string line;
+        getline(cin, line);
+        istringstream iss(line);
+        int neighbour;
+        while(iss >> neighbour){
+            gr[i].push_back(neighbour);
+        }
+    }
+
+    return gr;
+}
+
+
+int main(){
+    int N, x;
+    cout << "Enter the number of vertices: "; cin >> N;
+    vector<vector<int>> gr = Graph(N);
+
+    cout << "Enter the starting vertex: "; cin >> x;
+
+    cout << "DFS: ";
+    DFS(gr, N, x);
+    cout << endl;
+
+    cout << "BFS: ";
+    BFS(gr, N, x);
+    cout << endl;
+
+    return 0;
 }
