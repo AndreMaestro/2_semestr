@@ -55,15 +55,25 @@ tree *findNode(tree *tr, int x){
 
 void deleteRightNephew(tree *tr, int x){
     tree *nodeX = findNode(tr, x);
+    if (!nodeX || !nodeX->parent) return;
 
-    //проверка левого ребенка узла X
-    if(nodeX->left){
-        if(nodeX->left->right){
-            tree *rightNephew = nodeX->left->right;
+    tree *parent = nodeX->parent;
+    tree *brother;
+    if(parent->left == nodeX){
+        brother = parent->right;
+    }
+    else{
+        brother = parent->left;
+    }
+    
+    if(brother && brother->right){
+        
+            tree *rightNephew = brother->right;
             tree *leftchild = rightNephew->left;
             tree *rightchild = rightNephew->right;
-            nodeX->left->right = leftchild;
-            if (leftchild) leftchild->parent = nodeX->left;
+
+            brother->right = leftchild;
+            if (leftchild) leftchild->parent = brother;
 
             if(rightchild) {
                 tree *tmp = leftchild;
@@ -72,35 +82,16 @@ void deleteRightNephew(tree *tr, int x){
                     tmp->right = rightchild;
                     rightchild->parent = tmp;
                 }
+                else {
+                    brother->right = rightchild;
+                    rightchild->parent = brother;
+                }
             }
 
-            cout << "Правый племянник узла " << x << " через левого ребёнка: " << rightNephew->inf << ". DELETE" << endl;
+            cout << "Удалён правый племянник: " << rightNephew->inf << endl;
             delete rightNephew;
-        }
     }
     
-    //проверка правого ребенка X
-    if(nodeX->right){
-        if(nodeX->right->right){
-            tree *rightNephew = nodeX->right->right;
-            tree *leftchild = rightNephew->left;
-            tree *rightchild = rightNephew->right;
-            nodeX->right->right = leftchild;
-            if(leftchild) leftchild->parent = nodeX->right;
-
-            if(rightchild){
-                tree *tmp = leftchild;
-                while(tmp && tmp->right) tmp = tmp->right;
-                if(tmp) {
-                    tmp->right = rightchild;
-                    rightchild ->parent = tmp;
-                } 
-            }
-
-            cout << "Правый племянник узла " << x << " через правого ребёнка: " << rightNephew->inf << ". DELETE" << endl;
-            delete rightNephew;
-        }
-    }
 }
 
 void inorder (tree *tr){
@@ -124,7 +115,7 @@ int main() {
     inorder(tr);
     cout << endl;
 
-    int x = 10;
+    int x = 11;
     deleteRightNephew(tr, x);
 
     cout << "Tree after deletion: ";
