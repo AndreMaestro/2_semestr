@@ -53,51 +53,123 @@ tree *findNode(tree *tr, int x){
     else return findNode(tr->right, x);
 }
 
-void deleteRightNephew(tree *tr, int x){
+tree *Min(tree *tr){
+    if(!tr->left) return tr; //нет левого ребенка
+    else return Min(tr->left); //идем по левой ветке до конца
+}
+
+tree *Max(tree *tr){
+    if(!tr->right) return tr; //нет правого ребенка
+    else return Max(tr->right); //идем по правой ветке до конца
+}
+
+tree *Next(tree *tr, int x){
+    tree *n = findNode(tr, x);
+    if (n->right){
+        return Min(n->right);
+    }
+    tree *y = n->parent;
+    while (y && n == y->right){
+        n = y;
+        y = y->parent;
+    }
+    return y;
+}
+
+tree *Prev(tree *tr, int x){
+    tree *n = findNode(tr, x);
+    if (n->left){
+        return Max(n->left);
+    }
+    tree *y = n->parent;
+    while(y && n == y->left){
+        n = y;
+        y = y->parent;
+    }
+    return y;
+}
+
+void Delete(tree *&tr, tree *v){
+    tree *p = v->parent;
+    if(!p) tr = NULL; //дерево содержит один узел
+    else if (!v->left && !v->right){//если нет детей
+        if(p->left == v)
+            p->left = NULL;
+        if (p->right == v)
+            p->right = NULL;
+        delete v;
+    }
+    else if (!v->left || !v->right) { //если только один ребенок
+        if(!p) {
+            if (!v->left){
+                tr = v->right;
+                v->parent = NULL; 
+            }
+            else{
+                tr = v->left;
+                v->parent = NULL;
+            }
+        }
+        else{
+            if(!v->left){
+                if(p->left == v)
+                    p->left = v->right;
+                else
+                    p->right = v->right;
+                v->right->parent = p;
+            }
+            else{
+                if (p->left == v)
+                    p->left = v->left;
+                else
+                    p->right = v->left;
+                v->left->parent = p;
+            }
+            delete v;
+        }
+    }
+    else{//если оба ребенка
+        tree *succ = Next(tr, v->inf);
+        v->inf = succ->inf;
+        if(succ->parent->left == succ){
+            succ->parent->left = succ->right;
+            if (succ->right)
+                succ->right->parent = succ->parent;
+        }
+        else{
+            succ->parent->right = succ->right;
+            if(succ->right)
+            succ->right->parent = succ->parent;
+        }
+        delete succ;
+    }
+}
+
+void deleteRightNephew(tree *tr, int x) {
     tree *nodeX = findNode(tr, x);
     if (!nodeX || !nodeX->parent) return;
 
     tree *parent = nodeX->parent;
-    tree *brother;
-    if(parent->left == nodeX){
+    tree *brother; // брат родителя (дядя)
+    
+    // Определяем дядю
+    if (parent->left == nodeX) {
         brother = parent->right;
-    }
-    else{
+    } else {
         brother = parent->left;
     }
     
-    if(brother && brother->right){
-        
-            tree *rightNephew = brother->right;
-            tree *leftchild = rightNephew->left;
-            tree *rightchild = rightNephew->right;
-
-            brother->right = leftchild;
-            if (leftchild) leftchild->parent = brother;
-
-            if(rightchild) {
-                tree *tmp = leftchild;
-                while(tmp && tmp->right) tmp = tmp->right;
-                if(tmp){
-                    tmp->right = rightchild;
-                    rightchild->parent = tmp;
-                }
-                else {
-                    brother->right = rightchild;
-                    rightchild->parent = brother;
-                }
-            }
-
-            cout << "Удалён правый племянник: " << rightNephew->inf << endl;
-            delete rightNephew;
-    }
+    // Проверяем, существует ли дядя и есть ли у него правый потомок (племянник)
+    if (!brother || !brother->right) return;
     
+    tree *rightNephew = brother->right;
+    Delete(tr, rightNephew);
 }
 
 void inorder (tree *tr){
     if (tr){
-        inorder(tr->left);
         cout << tr->inf << " ";
+        inorder(tr->left);
         inorder(tr->right);
     }
 }
@@ -105,7 +177,7 @@ void inorder (tree *tr){
 int main() {
     tree *tr = NULL;
     
-    vector<int> num = {10, 5, 11, 15, 3, 7, 12, 20};
+    vector<int> num = {10, 5, 33, 28, 45, 7, 3, 9, 6, 1, 25, 30};
 
     for(int n : num){
         insert(tr, n);
@@ -115,7 +187,7 @@ int main() {
     inorder(tr);
     cout << endl;
 
-    int x = 11;
+    int x = 45;
     deleteRightNephew(tr, x);
 
     cout << "Tree after deletion: ";

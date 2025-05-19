@@ -59,7 +59,7 @@ int height(tree *tr){
     if (!tr) return 0;
     int leftH = height(tr->left);
     int rightH = height(tr->right);
-    return max(leftH, rightH) + 1;
+    return max(leftH, rightH);
 }
 
 int main() {
