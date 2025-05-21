@@ -1,4 +1,4 @@
-/*Дан список целых чисел. Построить дерево бинарного поиска. Дан узел Х. Если существуют "племянники", то удалить правого из них.*/
+/*Дан список целых чисел. Построиintтьint дерево бинарного поиска. Дан узел Х. Если существуют "племянники", то удалить правого из них.*/
 
 #include <iostream>
 #include <string>
@@ -58,11 +58,6 @@ tree *Min(tree *tr){
     else return Min(tr->left); //идем по левой ветке до конца
 }
 
-tree *Max(tree *tr){
-    if(!tr->right) return tr; //нет правого ребенка
-    else return Max(tr->right); //идем по правой ветке до конца
-}
-
 tree *Next(tree *tr, int x){
     tree *n = findNode(tr, x);
     if (n->right){
@@ -70,19 +65,6 @@ tree *Next(tree *tr, int x){
     }
     tree *y = n->parent;
     while (y && n == y->right){
-        n = y;
-        y = y->parent;
-    }
-    return y;
-}
-
-tree *Prev(tree *tr, int x){
-    tree *n = findNode(tr, x);
-    if (n->left){
-        return Max(n->left);
-    }
-    tree *y = n->parent;
-    while(y && n == y->left){
         n = y;
         y = y->parent;
     }
@@ -166,11 +148,11 @@ void deleteRightNephew(tree *tr, int x) {
     Delete(tr, rightNephew);
 }
 
-void inorder (tree *tr){
+void preorder (tree *tr){
     if (tr){
         cout << tr->inf << " ";
-        inorder(tr->left);
-        inorder(tr->right);
+     preorder(tr->left);
+     preorder(tr->right);
     }
 }
 
@@ -184,14 +166,14 @@ int main() {
     }
 
     cout << "Tree before deletion: ";
-    inorder(tr);
+ preorder(tr);
     cout << endl;
 
-    int x = 45;
+    int x = 33;
     deleteRightNephew(tr, x);
 
     cout << "Tree after deletion: ";
-    inorder(tr);
+ preorder(tr);
     cout << endl;
     
     return 0;
