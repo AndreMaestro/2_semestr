@@ -29,13 +29,12 @@ vector<vector<int>> Gr(int n, int m){
     return Gr;
 }
 
-void printGr(const vector<vector<int>> &gr){
-    for(int i = 0; i < gr.size(); i++){
-        cout << "Vertex " << i << ": ";
-        for (int n : gr[i]) cout << n << " ";
-        cout << endl;
+void out_degree(const vector<vector<int>> &gr){ //полустепень исхода
+    for (int i = 0; i < gr.size(); i++){
+        cout << "Out-degree of the vertex " << i << ": " << gr[i].size() << endl;
     }
 }
+
 
 int main(){
     int n, m;
@@ -45,6 +44,7 @@ int main(){
     
     vector<vector<int>> gr = Gr(n, m);
 
+    out_degree(gr);
        
     return 0;
 }
