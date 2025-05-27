@@ -6,7 +6,7 @@
 using namespace std;
 
 
-vector<vector<int>> Gr(int n, int m, bool isDirected){
+vector<vector<int>> Gr(int n, int m){
     vector<vector<int>> Gr;
     Gr.resize(n);
 
@@ -17,13 +17,9 @@ vector<vector<int>> Gr(int n, int m, bool isDirected){
 
         if (x > n || y > n || x < 0 || y < 0) continue;
 
-        if(isDirected){
-            Gr[x].push_back(y);
-        }
-        else{
-            Gr[x].push_back(y);
-            Gr[y].push_back(x);
-        }
+        
+        Gr[x].push_back(y);
+        
     }
 
     for (int i = 0; i < n; i++){
@@ -68,13 +64,10 @@ void printNoAdjVer(const vector<vector<int>> &gr, int ver){
 
 int main(){
     int n, m;
-    bool isDirected;
-
     cout << "Enter the number of vertices (n): "; cin >> n;
     cout << "Enter the number of edges (m): "; cin >> m;
-    cout << ("is the graph directed? 1-yes, 0-no: "); cin >> isDirected;
-    
-    vector<vector<int>> gr = Gr(n, m, isDirected);
+
+    vector<vector<int>> gr = Gr(n, m);
 
     int ver;
     cout << "Enter a vertex to find non-adjacent vertices for it: "; cin >> ver;
