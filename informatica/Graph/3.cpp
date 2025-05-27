@@ -18,7 +18,6 @@ vector<vector<int>> Gr(int n, int m){
         if (x > n || y > n || x < 0 || y < 0) continue;
 
         Gr[x].push_back(y);
-        Gr[y].push_back(x);
     }
 
     for (int i = 0; i < n; i++){
