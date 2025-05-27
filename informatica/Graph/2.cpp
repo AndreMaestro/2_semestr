@@ -29,8 +29,24 @@ vector<vector<int>> Gr(int n, int m){
     return Gr;
 }
 
-void deleteEdge (const vector<vector<int>> gr, int verA, int verB){
+void deleteEdge (vector<vector<int>> &gr, int verA, int verB){
+    auto itA = find(gr[verA].begin(), gr[verA].end(), verB);
+    if (itA != gr[verA].end()){
+        gr[verA].erase(itA);
+    }
 
+    auto itB = find(gr[verB].begin(), gr[verB].end(), verA);
+    if (itB != gr[verB].end()){
+        gr[verB].erase(itB);
+    }
+}
+
+void printGr(const vector<vector<int>> &gr){
+    for(int i = 0; i < gr.size(); i++){
+        cout << "Vertex " << i << ": ";
+        for (int n : gr[i]) cout << n << " ";
+        cout << endl;
+    }
 }
 
 int main(){
@@ -46,8 +62,14 @@ int main(){
     cout << "Enter vertex B: "; cin >> verB;
     cout << endl;
     
-    deleteEdge(gr, verA, verB);
+    cout << "Graph before edit" << endl;
+    printGr(gr);
+    cout << endl;
 
+    deleteEdge(gr, verA, verB);
+    cout << "Graph after edit" << endl;
+    printGr(gr);
+    cout << endl;
 
     return 0;
 }
