@@ -29,6 +29,13 @@ vector<vector<int>> Gr(int n, int m){
     return Gr;
 }
 
+vector<bool> visited;
+void dfs(const vector<vector<int>> gr, int v){
+    visited[v] = true;
+    for(int r : gr[v]){
+        if(!visited[r]) dfs(gr, r);
+    }
+}
 
 int main(){
     int n, m;
