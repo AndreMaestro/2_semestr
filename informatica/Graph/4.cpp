@@ -37,6 +37,17 @@ void dfs(const vector<vector<int>> gr, int v){
     }
 }
 
+bool isConnect(const vector<vector<int>> &gr){
+    int n = gr.size();
+    visited.assign(n, false);
+    dfs(gr, 0);
+
+    for(bool v : visited){
+        if (!v) return false;
+    }
+    return true;
+}
+
 int main(){
     int n, m;
 
@@ -45,5 +56,8 @@ int main(){
     
     vector<vector<int>> gr = Gr(n, m);
 
+    if(isConnect(gr)) cout << "The graph is connected";
+    else cout << "The graph is not connected";
+    
     return 0;
 }
