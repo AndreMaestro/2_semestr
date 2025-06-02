@@ -1,4 +1,4 @@
-/*Дан неориентированный граф. Выяснить, является ли граф связным.*/
+/*Дан неориентированный граф. Вывести Эйлеров путь или Эйлеров цикл, если он существует.*/
 
 #include <iostream>
 #include <vector>
@@ -30,17 +30,41 @@ vector<vector<int>> Gr(int n, int m){
     return Gr;
 }
 
-bool checkEilerPath(const vector<vector<int>> &gr){
-    int c = 0;
-    for(int i = 0; i < gr.size(); i++){
-        if (gr[i].size() % 2 != 0) c++;
+vector<bool> visited;
+void dfs(const vector<vector<int>> gr, int v){
+    visited[v] = true;
+    for(int r : gr[v]){
+        if(!visited[r]) dfs(gr, r);
     }
+}
 
-    if (c > 2) return false;
+bool isConnect(const vector<vector<int>> &gr){
+    int n = gr.size();
+    visited.assign(n, false);
+    int start = -1;
+    
+    // Находим первую вершину с ненулевой степенью
+    for(int i = 0; i < n; i++) {
+        if(!gr[i].empty()) {
+            start = i;
+            break;
+        }
+    }
+    
+    if(start == -1) return true; // граф без ребер
+    
+    dfs(gr, start);
+
+    // Проверяем только вершины с ребрами
+    for(int i = 0; i < n; i++) {
+        if(!gr[i].empty() && !visited[i]) {
+            return false;
+        }
+    }
     return true;
 }
 
-vector<int> findEilerPath(vector<vector<int>> &gr){
+vector<int> findEilerPath(vector<vector<int>> gr){
     int n = gr.size();
     vector<int> degrees(n);
     vector<int> res;
@@ -51,14 +75,22 @@ vector<int> findEilerPath(vector<vector<int>> &gr){
         degrees[i] = gr[i].size();
     }
 
+
     //Находим вершины с нечетными степенями
     int v1 = -1, v2 = -1;
     for(int i = 0; i < n; i++){
         if(degrees[i] % 2 != 0){
             if(v1 == -1) v1 = i;
             else if (v2 == -1) v2 = i;
-            else return;
+            else return{};
         } 
+    }
+
+    // Проверяем условия существования Эйлерова пути/цикла
+    if(!(v1 == -1 || v2 == -1)) {
+        if(!isConnect(gr)) return {};
+    } else {
+        if(!isConnect(gr)) return {};
     }
 
     //Если есть вершины с нечётными степенями, добавляем ребро
@@ -101,12 +133,12 @@ vector<int> findEilerPath(vector<vector<int>> &gr){
     }
 
     //Если добавляли ребро, корректируем путь
-    if (v1 == -1){
-        for(int i = 0; i+1 < n; i++){
+    if (addedEdge){
+        for(int i = 0; i+1 < res.size(); i++){
             if ((res[i] == v1 && res[i+1] == v2) || (res[i] == v2 && res[i+1] == v1)){
                 vector<int> newP;
                 newP.insert(newP.end(), res.begin() + i + 1, res.end());
-                newP.insert(newP.end(), res.begin() + 1, res.end() + i + 1);
+                newP.insert(newP.end(), res.begin() + 1, res.begin() + i + 1);
                 res = newP;
                 break;
             }
@@ -115,7 +147,7 @@ vector<int> findEilerPath(vector<vector<int>> &gr){
 
     //Проверяем, все ли рёбра использованы
     for(int d : degrees){
-        if (d != 0) return;
+        if (d != 0 && d != 2) return{};
     }
     return res;
 }
