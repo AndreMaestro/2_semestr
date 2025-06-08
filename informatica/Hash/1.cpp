@@ -15,7 +15,7 @@ struct date{
 struct worker{
     string surname;
     string post;
-    date date_of_bithday;
+    date date_of_birthday;
     int exp;
     int pay;
 };
@@ -47,9 +47,9 @@ void push(list *&h, list *&t, worker x){
 }
 
 void print_worker(worker x){
-    string i = x.date_of_bithday.day / 10 == 0 ? "0" : "";
-    string i1 = x.date_of_bithday.month / 10 == 0 ? "0" : "";
-    cout << x.surname << ", " << x.post << ", " << i << x.date_of_bithday.day << "." << i1 << x.date_of_bithday.month << "." << x.date_of_bithday.year << ", " << x.exp << ", " << x.pay << endl;
+    string i = x.date_of_birthday.day / 10 == 0 ? "0" : "";
+    string i1 = x.date_of_birthday.month / 10 == 0 ? "0" : "";
+    cout << x.surname << ", " << x.post << ", " << i << x.date_of_birthday.day << "." << i1 << x.date_of_birthday.month << "." << x.date_of_birthday.year << ", " << x.exp << ", " << x.pay << endl;
 }
 
 void print(list *&h, list *&t){
@@ -65,7 +65,7 @@ vector<list*> find(list *&h, list *&t, int x){
     vector<list*> res;
     list *p = h;
     while(p){
-        if (p->inf.date_of_bithday.day == x) res.push_back(p);
+        if (p->inf.date_of_birthday.day == x) res.push_back(p);
         p = p->next;
     }
     return res;
@@ -104,11 +104,11 @@ worker str_to_worker(string str){
     human.post = str.substr(k, k1 - k);
     k = k1 + 2; k1 = str.find_first_of(",", k);
     size_t i = k; size_t i1 = str.find_first_of(".", k);
-    human.date_of_bithday.day = stoi(str.substr(i, i1-i));
+    human.date_of_birthday.day = stoi(str.substr(i, i1-i));
     i = i1 + 1; i1 = str.find_first_of(".", i);
-    human.date_of_bithday.month = stoi(str.substr(i, i1-i));
+    human.date_of_birthday.month = stoi(str.substr(i, i1-i));
     i = i1 + 1; i1 = str.find_first_of(".", i);
-    human.date_of_bithday.year = stoi(str.substr(i, i1-i));
+    human.date_of_birthday.year = stoi(str.substr(i, i1-i));
     k = k1 + 2; k1 = str.find_first_of(",", k);
     human.exp = stoi(str.substr(k, k1 - k));
     k = k1 + 2; k1 = str.find_first_of(",", k);
@@ -120,7 +120,7 @@ worker str_to_worker(string str){
 vector<List> createHashTab (vector<worker> A, int M){
     vector<List> hashTable(M);
     for (int i = 0; i < A.size(); i++){
-        int k = h(A[i].date_of_bithday.day, M);
+        int k = h(A[i].date_of_birthday.day, M);
         push(hashTable[k].h, hashTable[k].t, A[i]);
     }
     return hashTable;
@@ -156,7 +156,7 @@ void enterHash(vector<List> &hashTable){
     string x;
     getline(cin, x);
     worker tmp = str_to_worker(x);
-    int k = h(tmp.date_of_bithday.day, hashTable.size());
+    int k = h(tmp.date_of_birthday.day, hashTable.size());
     push(hashTable[k].h, hashTable[k].t, tmp);
 }
 
@@ -166,7 +166,7 @@ int main() {
     int M = 16;
     string str;
     for(int i = 0; i < 20; i++){
-        getline(cin, str);
+        getline(in, str);
         A[i] = str_to_worker(str);
     }
     vector<List> hashTable = createHashTab(A, M);
