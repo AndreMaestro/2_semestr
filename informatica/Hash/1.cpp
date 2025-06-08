@@ -183,4 +183,4 @@ int main() {
 
 }
 
-/*Semenov Designer 15.02.1982 21 85000*/
+/*Semenov, Designer, 15.02.1982, 21, 85000*/
